@@ -22,8 +22,8 @@ def info() -> typing.Dict:
 
     return {
         "apiversion": "1",
-        "author": "",  # TODO: Your Battlesnake Username
-        "color": "#888888",  # TODO: Choose color
+        "author": "Bluewolf787",  # TODO: Your Battlesnake Username
+        "color": "#A7C080",  # TODO: Choose color
         "head": "default",  # TODO: Choose head
         "tail": "default",  # TODO: Choose tail
     }
@@ -63,11 +63,40 @@ def move(game_state: typing.Dict) -> typing.Dict:
         is_move_safe["up"] = False
 
     # TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
-    # board_width = game_state['board']['width']
-    # board_height = game_state['board']['height']
+    board_width = game_state['board']['width']
+    board_height = game_state['board']['height']
+    
+    #print(f"WIDTH: {board_width}")
+    #print(f"HEIGHT: {board_height}")
+
+    #print(f"HEAD X: {my_head['x']}")
+    #print(f"HEAD Y: {my_head['y']}")
+
+    if my_head["x"] == board_width - 1:
+        is_move_safe["right"] = False
+    elif my_head["x"] == 0:
+        is_move_safe["left"] = False
+
+    if my_head["y"] == 0:
+        is_move_safe["down"] = False
+    elif my_head["y"] == board_height - 1:
+        is_move_safe["up"] = False
 
     # TODO: Step 2 - Prevent your Battlesnake from colliding with itself
-    # my_body = game_state['you']['body']
+    my_body = game_state['you']['body']
+
+    #print(f"BODY: {my_body}")
+
+    for body_coords in my_body:
+        if body_coords["x"] < my_head["x"] and body_coords["y"] == my_head["y"]:
+            is_move_safe["left"] = False
+        elif body_coords["x"] > my_head["x"] and body_coords["y"] == my_head["y"]:
+            is_move_safe["right"] = False
+        elif body_coords["y"] < my_head["y"] and body_coords["x"] == my_head["x"]:
+            is_move_safe["down"] = False
+        elif body_coords["y"] > my_head["y"] and body_coords["x"] == my_head["x"]:
+            is_move_safe["up"] = False
+
 
     # TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
     # opponents = game_state['board']['snakes']
